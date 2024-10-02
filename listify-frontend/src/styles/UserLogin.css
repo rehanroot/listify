@@ -1,0 +1,98 @@
+.login-container {
+    width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #fff; /* Background color */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Box shadow */
+    text-align: center; /* Centered text */
+}
+
+.logo {
+    width: 100px; /* Adjust size */
+    margin-bottom: 20px;
+}
+
+.login-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left; /* Align label and input to the left */
+}
+
+.input-group label {
+    margin-bottom: 5px; /* Add some space between label and input */
+    display: block; /* Make label block-level */
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px; /* Rounded input */
+    border: 1px solid #ccc; /* Border color */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Input shadow */
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    background: none;
+    border: none;
+    color: #007BFF; /* Button color */
+    cursor: pointer;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px; /* Rounded button */
+    background-color: #007BFF; /* Button color */
+    color: white; /* Button text color */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #0056b3; /* Darker on hover */
+}
+
+.links {
+    margin: 15px 0;
+}
+
+.link {
+    color: #007BFF; /* Link color */
+}
+
+.social-login {
+    margin-top: 20px;
+}
+
+.social-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px; /* Rounded button */
+    background-color: #f0f0f0; /* Light button color */
+    border: 1px solid #ccc; /* Border color */
+    cursor: pointer;
+}
+
+.social-button:hover {
+    background-color: #e0e0e0; /* Darker on hover */
+}
