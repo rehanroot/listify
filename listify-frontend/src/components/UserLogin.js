@@ -30,6 +30,8 @@ const UserLogin = () => {
 
     return (
         <div className="login-container">
+            {/* Logo Text */}
+            <h2 className="logo-text">Listify</h2> {/* Add this line */}
             <h1 className="login-title">Welcome Back</h1>
             {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
             <form onSubmit={handleSubmit} className="login-form">
@@ -65,9 +67,9 @@ const UserLogin = () => {
                 </button>
             </form>
             <div className="social-login">
-                <button className="social-button facebook-button">Log in with Facebook</button>
-                <button className="social-button google-button">Log in with Google</button>
-                <button className="social-button twitter-button">Log in with Twitter</button>
+                <button className="social-button facebook-button">Continue with Facebook</button>
+                <button className="social-button google-button">Continue with Google</button>
+                <button className="social-button twitter-button">Continue with Twitter</button>
             </div>
             <div className="links">
                 <a href="/forgot-password" className="link">Forgot Password?</a>
