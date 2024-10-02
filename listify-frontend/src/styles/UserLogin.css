@@ -1,84 +1,151 @@
+/* Login Container */
 .login-container {
     background-image: url('../assets/1.JPG'); /* Path to your background image */
-    background-size: cover; /* Ensure the image covers the entire container */
-    background-position: center; /* Center the image */
-    min-height: 100vh; /* Full viewport height */
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    padding: 20px; /* Add padding */
-    color: white; /* Change text color to white for contrast */
-    text-align: center; /* Center align text */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #333;
+    text-align: center;
+    opacity: 0.9;
 }
 
 .login-title {
-    font-size: 36px; /* Increase font size */
-    margin-bottom: 20px; /* Space below title */
-    font-weight: bold; /* Make title bold */
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #4b8a3a;
 }
 
+/* Floating label input group */
 .input-group {
-    width: 100%;
-    max-width: 400px; /* Limit the maximum width */
-    margin-bottom: 15px; /* Space between input groups */
+    position: relative;
+    margin-bottom: 20px;
+    width: 400px; /* Set to fixed width */
 }
 
 .input-field {
-    width: 100%; /* Full width for inputs */
-    padding: 12px; /* Increase padding */
-    margin-bottom: 10px; /* Space below input */
-    border: 1px solid rgba(255, 255, 255, 0.5); /* Semi-transparent border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size */
-    background-color: rgba(255, 255, 255, 0.8); /* Light background for inputs */
-    color: #333; /* Text color inside inputs */
+    width: 100%;
+    padding: 15px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    background-color: white;
+    color: #333;
+    outline: none;
+    box-sizing: border-box;
 }
 
-.password-wrapper {
-    position: relative; /* Position relative for toggle button */
+/* Floating label */
+.floating-label-text {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    transition: 0.3s ease;
+    font-size: 18px;
+    color: #999;
+    pointer-events: none;
 }
 
+.input-field:focus + .floating-label-text,
+.input-field:not(:placeholder-shown) + .floating-label-text {
+    top: 5px;
+    font-size: 12px;
+    color: #4b8a3a;
+}
+
+/* Toggle password button */
 .toggle-password {
     position: absolute;
-    right: 10px; /* Align to the right */
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%); /* Adjust for vertical centering */
-    background: none; /* No background */
-    border: none; /* No border */
-    color: #007bff; /* Link color */
-    cursor: pointer; /* Pointer cursor */
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
 }
 
+/* Login Button */
 .login-button {
-    width: 100%; /* Full width for button */
-    padding: 12px; /* Increased padding for button */
-    background-color: #007bff; /* Button color */
-    color: white; /* Text color */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.3s; /* Smooth background color transition */
+    width: 400px; /* Same fixed width */
+    padding: 15px;
+    background-color: #4b8a3a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px; /* Added margin to separate from the input fields */
 }
 
 .login-button:hover {
-    background-color: #0056b3; /* Darken on hover */
+    background-color: #3b6f2a;
 }
 
+/* Social Login Buttons */
+.social-login {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.social-button {
+    width: 400px; /* Set to fixed width */
+    padding: 15px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.facebook-button {
+    background-color: #4267B2;
+}
+
+.facebook-button:hover {
+    background-color: #365899;
+}
+
+.google-button {
+    background-color: #db4437;
+}
+
+.google-button:hover {
+    background-color: #c5382b;
+}
+
+.twitter-button {
+    background-color: #1DA1F2;
+}
+
+.twitter-button:hover {
+    background-color: #0d8af0;
+}
+
+/* Links */
 .links {
-    margin-top: 20px; /* Space above links */
+    margin-top: 20px;
 }
 
 .link {
-    color: #007bff; /* Link color */
-    text-decoration: none; /* Remove underline */
+    color: #007bff;
+    text-decoration: none;
 }
 
 .link:hover {
-    text-decoration: underline; /* Underline on hover */
+    text-decoration: underline;
 }
 
 .separator {
-    margin: 0 5px; /* Space between links */
+    margin: 0 5px;
 }
