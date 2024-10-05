@@ -19,7 +19,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         try {
-            userService.registerUser(user.getUsername(), user.getPassword(), user.getRole()); // Include role
+            userService.registerUser(user.getUsername(), user.getPassword()); // Remove role
             return ResponseEntity.status(201).body("User registered successfully");
         } catch (Exception e) {
             return ResponseEntity.status(400).body("Registration failed: " + e.getMessage());
@@ -30,14 +30,12 @@ public class UserController {
     public ResponseEntity<String> loginUser(@RequestBody Map<String, String> loginRequest) {
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
-        String role = loginRequest.get("role"); // Getting role from request
 
-        boolean isLoggedIn = userService.authenticateUser(username, password, role);
+        boolean isLoggedIn = userService.authenticateUser(username, password); // Remove role
         if (isLoggedIn) {
             return ResponseEntity.ok("Login successful");
         } else {
-            return ResponseEntity.status(401).body("Invalid credentials or role mismatch");
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
-
 }

@@ -37,11 +37,10 @@ mysqlConnection.connect(err => {
     console.log('MySQL connected');
 });
 
-// User Schema for MongoDB (not needed for this flow but retained for potential future use)
+// User Schema for MongoDB without role
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
-    role: { type: String, required: true, enum: ['user', 'seller'] } // Added role field
 });
 
 // Ad Schema for MongoDB
@@ -58,10 +57,10 @@ const Ad = mongoose.model('Ad', adSchema);
 
 // User registration
 app.post('/api/user/register', async (req, res) => {
-    const { username, password, role } = req.body;
+    const { username, password } = req.body; // Removed role
     try {
         // Register user via Java endpoint
-        const response = await axios.post('http://localhost:8080/api/user/register', { username, password, role });
+        const response = await axios.post('http://localhost:8080/api/user/register', { username, password }); // Removed role
         res.status(201).json(response.data); // Forward the success message from Java
     } catch (error) {
         console.error('Registration error:', error);
@@ -71,14 +70,14 @@ app.post('/api/user/register', async (req, res) => {
 
 // User login
 app.post('/api/user/login', async (req, res) => {
-    const { username, password, role } = req.body;
+    const { username, password } = req.body; // Removed role
     try {
         // Login user via Java endpoint
-        const response = await axios.post('http://localhost:8080/api/user/login', { username, password, role });
+        const response = await axios.post('http://localhost:8080/api/user/login', { username, password }); // Removed role
         res.json(response.data); // Forward the success message from Java
     } catch (error) {
         console.error('Login error:', error.response ? error.response.data : error.message);
-        res.status(401).json({ error: 'Invalid credentials or role mismatch' });
+        res.status(401).json({ error: 'Invalid credentials' });
     }
 });
 
