@@ -176,6 +176,10 @@ app.get('/api/health/python', async (req, res) => {
         });
     }
 });
+app.get('/api/node', (req, res) => {
+    res.json({ message: "Hello from Node.js Service!" });
+});
+
 
 // Start the server
 app.listen(PORT, () => {

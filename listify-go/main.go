@@ -4,10 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -74,14 +76,102 @@ func connectMongoDB() {
 	fmt.Println("Connected to MongoDB")
 }
 
+// Call Python service
+func callPythonService() (string, error) {
+	resp, err := http.Get("http://localhost:8000/api/test")
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return string(body), nil
+}
+
+// Call Java service
+func callJavaService() (string, error) {
+	resp, err := http.Get("http://localhost:8080/api/hello")
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return string(body), nil
+}
+
+// Call Node.js service
+func callNodeService() (string, error) {
+	resp, err := http.Get("http://localhost:5000/api/node")
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return string(body), nil
+}
+
+// Handler to call all external services
+func callExternalServicesHandler(c *gin.Context) {
+	// Call Python service
+	pythonResp, err := callPythonService()
+	if err != nil {
+		log.Println("Error calling Python service:", err)
+		pythonResp = "Error calling Python service"
+	}
+
+	// Call Java service
+	javaResp, err := callJavaService()
+	if err != nil {
+		log.Println("Error calling Java service:", err)
+		javaResp = "Error calling Java service"
+	}
+
+	// Call Node.js service
+	nodeResp, err := callNodeService()
+	if err != nil {
+		log.Println("Error calling Node.js service:", err)
+		nodeResp = "Error calling Node.js service"
+	}
+
+	// Respond with results from all services
+	c.JSON(http.StatusOK, gin.H{
+		"pythonService": pythonResp,
+		"javaService":   javaResp,
+		"nodeService":   nodeResp,
+	})
+}
+
 func main() {
 	// Connect to databases
 	connectMariaDB()
 	connectMySQL()
 	connectMongoDB()
 
-	// Set up Gin router
+	// Set up Gin router with CORS middleware
 	router := gin.Default()
+
+	// Configure CORS settings
+	corsConfig := cors.Config{
+		AllowOrigins:     []string{"*"}, // Allow all origins
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour, // Cache preflight requests
+	}
+
+	router.Use(cors.New(corsConfig))
 
 	// MariaDB test route
 	router.GET("/mariadb", func(c *gin.Context) {
@@ -103,6 +193,9 @@ func main() {
 			"message": "Connected to MongoDB successfully!",
 		})
 	})
+
+	// Route to call external services
+	router.GET("/call-services", callExternalServicesHandler)
 
 	// Run the server on port 7000
 	router.Run(":7000")
