@@ -4,6 +4,7 @@ import UserLogin from './components/UserLogin';
 import UserRegistration from './components/UserRegistration';
 import Dashboard from './components/Dashboard';
 import FlaskIntegration from './components/FlaskIntegration';
+import JavaIntegration from "./components/JavaIntegration";
 
 const App = () => {
     return (
@@ -17,6 +18,8 @@ const App = () => {
                     {/* Dashboard route */}
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/flask" element={<FlaskIntegration />} />
+                    {/* Java integration route */}
+                    <Route path="/java" element={<JavaIntegration />} /> {/* Added JavaIntegration route */}
                 </Routes>
             </div>
         </Router>
