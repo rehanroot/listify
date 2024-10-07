@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const mysql = require('mysql'); // Import MySQL
 const axios = require('axios'); // Import axios for HTTP requests
+const mysql2 = require('mysql2');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,34 @@ const mysqlConnection = mysql.createConnection({
     user: 'nodeside',  // Replace with your MySQL username
     password: 'Prithibi420@',  // Replace with your MySQL password
     database: 'listify'  // Replace with your database name
+});
+// MariaDB connection
+const mariaDBConnection = mysql2.createConnection({
+    host: '127.0.0.1',
+    user: 'root',  // MariaDB username
+    password: 'Prithibi420@',  // MariaDB password
+    database: 'listify',  // MariaDB database name
+    port: 3309,  // MariaDB port
+});
+
+// Connect to MariaDB
+mariaDBConnection.connect(err => {
+    if (err) {
+        console.error('MariaDB connection error:', err);
+        return;
+    }
+    console.log('MariaDB connected');
+});
+
+// MariaDB test API
+app.get('/api/mariadb/test', (req, res) => {
+    mariaDBConnection.query('SELECT 1 + 1 AS solution', (err, results) => {
+        if (err) {
+            console.error('MariaDB query error:', err);
+            return res.status(500).json({ error: 'MariaDB query failed' });
+        }
+        res.json({ solution: results[0].solution }); // Should return { solution: 2 }
+    });
 });
 
 // Connect to MySQL
