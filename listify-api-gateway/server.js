@@ -93,15 +93,12 @@ app.post('/api/ads', async (req, res) => {
 app.get('/api/items', async (req, res) => {
     try {
         const response = await axios.get('http://localhost:8080/api/items', {
-            auth: {
-                username: 'admin', // Replace with your actual username
-                password: 'secret'  // Replace with your actual password
-            }
+            // Remove the auth section if the endpoint is public
         });
         res.json(response.data); // Return items received from Java
     } catch (error) {
-        console.error('Error fetching items from Java:', error);
-        res.status(500).json({ error: 'Failed to fetch items from Java backend' });
+        console.error('Error fetching items from Java:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'Failed to fetch items from Java backend', details: error });
     }
 });
 
@@ -124,6 +121,31 @@ app.get('/api/mysql/users', (req, res) => {
         }
         res.json(results);
     });
+});
+
+// Health check endpoint for Node.js
+app.get('/api/health/nodejs', (req, res) => {
+    res.json({ message: 'Node.js is running!' });
+});
+
+// Health check for Python backend
+app.get('/api/health/python', async (req, res) => {
+    try {
+        // Make a request to Python backend's health endpoint
+        const response = await axios.get('http://localhost:8000/api/health'); // Adjust URL to the correct Python port
+        res.json({
+            status: 'success',
+            message: 'Connected to Python backend',
+            pythonResponse: response.data,
+        });
+    } catch (error) {
+        console.error('Python backend connection error:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to connect to Python backend',
+            error: error.response ? error.response.data : error.message,
+        });
+    }
 });
 
 // Start the server

@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/user/register", "/api/user/login").permitAll() // Allow registration and login
                         .requestMatchers("/api/maria-items/**").permitAll() // Allow public access to Maria items
+                        .requestMatchers("/api/items/**").permitAll()
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .httpBasic(httpBasic -> {}); // HTTP Basic Authentication

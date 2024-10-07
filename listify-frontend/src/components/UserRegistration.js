@@ -20,6 +20,19 @@ const UserRegistration = () => {
 
     return (
         <div className="registration-page">
+            <nav className="top-nav">
+                <div className="logo">Your Logo</div>
+                <ul className="horizontal-menu">
+                    <li><a href="/neighborhoods">Neighborhood</a></li>
+                    <li><a href="/agencies">Agencies</a></li>
+                    <li><a href="/businesses">Small Business</a></li>
+                    <li><a href="/brands-agencies">Brands & Agencies</a></li>
+                    <li><a href="/Community">Community</a></li>
+                    <li><a href="/Events">Events</a></li>
+                </ul>
+                <a href="/login" className="login-button">Login</a>
+            </nav>
+
             <div className="registration-container">
                 <h1 className="welcome-title">Welcome to Listify</h1>
                 <h1 className="form-title">Sign Up</h1>
@@ -53,15 +66,70 @@ const UserRegistration = () => {
 
                 <div className="social-login-container">
                     <p>Or continue with</p>
-                    <button className="social-button google-button">Continue with Google</button>
-                    <button className="social-button facebook-button">Continue with Facebook</button>
-                    <button className="social-button twitter-button">Continue with Twitter</button>
+                    <div className="social-buttons">
+                        <button className="social-button google-button">Google</button>
+                        <button className="social-button facebook-button">Facebook</button>
+                        <button className="social-button twitter-button">Twitter</button>
+                    </div>
                 </div>
             </div>
 
-            <nav className="top-nav">
-                <a href="/login" className="login-button">Login</a>
-            </nav>
+            <footer className="footer">
+                <div className="footer-section">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/news">News</a></li>
+                        <li><a href="/media-assets">Media Assets</a></li>
+                        <li><a href="/investor-relations">Investor Relations</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/careers">Careers</a></li>
+                        <li><a href="/help">Help</a></li>
+                    </ul>
+                </div>
+                <div className="footer-section">
+                    <h3>Neighbors</h3>
+                    <ul>
+                        <li><a href="/get-started">Get Started</a></li>
+                        <li><a href="/events">Events</a></li>
+                        <li><a href="/neighborhoods">Neighborhoods</a></li>
+                        <li><a href="/guidelines">Guidelines</a></li>
+                        <li><a href="/neighborhood-faves">2023 Neighborhood Faves</a></li>
+                        <li><a href="/anti-racism-resources">Anti-Racism Resources</a></li>
+                        <li><a href="/crisis-hub">Crisis Hub</a></li>
+                    </ul>
+                </div>
+                <div className="footer-section">
+                    <h3>Business and Organizations</h3>
+                    <ul>
+                        <li><a href="/small-business">Small Business</a></li>
+                        <li><a href="/brands-agencies">Brands & Agencies</a></li>
+                        <li><a href="/public-agency">Public Agency</a></li>
+                        <li><a href="/businesses-on-nextdoor">Businesses on Nextdoor</a></li>
+                        <li><a href="/neighborhood-faves">Neighborhood Faves</a></li>
+                        <li><a href="/self-service-ad-terms">Self-Service Ad Terms</a></li>
+                        <li><a href="/for-developers">For Developers</a></li>
+                    </ul>
+                </div>
+                <div className="footer-section">
+                    <h3>Industries</h3>
+                    <ul>
+                        <li><a href="/home-garden">Home & Garden</a></li>
+                        <li><a href="/real-estate">Real Estate</a></li>
+                        <li><a href="/professional-services">Professional Services</a></li>
+                        <li><a href="/food-entertainment">Food & Entertainment</a></li>
+                        <li><a href="/shopping-retail">Shopping & Retail</a></li>
+                        <li><a href="/medical-dental">Medical & Dental</a></li>
+                    </ul>
+                </div>
+                <div className="footer-section">
+                    <h3>Privacy</h3>
+                    <ul>
+                        <li><a href="/legal-terms">Legal & Terms</a></li>
+                        <li><a href="/cookies">Cookies</a></li>
+                    </ul>
+                </div>
+            </footer>
         </div>
     );
 };
