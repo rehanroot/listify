@@ -3,8 +3,11 @@ import requests
 import mysql.connector
 import mariadb
 from pymongo import MongoClient
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3001"}})
+
 
 # MySQL connection setup
 def mysql_connection():
@@ -18,6 +21,7 @@ def mysql_connection():
         return connection
     except mysql.connector.Error as e:
         return str(e)
+
 
 # MariaDB connection setup
 def mariadb_connection():
@@ -33,6 +37,7 @@ def mariadb_connection():
     except mariadb.Error as e:
         return str(e)
 
+
 # MongoDB connection setup
 def mongodb_connection():
     try:
@@ -42,15 +47,18 @@ def mongodb_connection():
     except Exception as e:
         return str(e)
 
+
 # Test route
 @app.route('/api/test', methods=['GET'])
 def test():
     return jsonify({'message': 'Flask is up and running!'})
 
+
 # Health check endpoint for the Flask app
 @app.route('/api/health', methods=['GET'])
 def health():
     return jsonify({'status': 'success', 'message': 'Python backend is running!'})
+
 
 # Test connectivity to Java
 @app.route('/api/java', methods=['GET'])
@@ -61,6 +69,7 @@ def connect_java():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 # Test connectivity to Node.js (Health check)
 @app.route('/api/health/nodejs', methods=['GET'])
 def health_node():
@@ -69,6 +78,7 @@ def health_node():
         return jsonify({'message': 'Connected to Node.js!', 'nodeResponse': response.json()}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 # New endpoint: Test MySQL connection
 @app.route('/api/mysql/test', methods=['GET'])
@@ -86,6 +96,7 @@ def test_mysql():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 # New endpoint: Test MariaDB connection
 @app.route('/api/mariadb/test', methods=['GET'])
 def test_mariadb():
@@ -102,6 +113,7 @@ def test_mariadb():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 # New endpoint: Test MongoDB connection
 @app.route('/api/mongodb/test', methods=['GET'])
 def test_mongodb():
@@ -114,6 +126,7 @@ def test_mongodb():
         return jsonify({'message': 'MongoDB connected', 'document_count': doc_count})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
