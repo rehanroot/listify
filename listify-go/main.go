@@ -193,6 +193,12 @@ func main() {
 			"message": "Connected to MongoDB successfully!",
 		})
 	})
+	// Hello World route
+	router.GET("/hello", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello, World!",
+		})
+	})
 
 	// Route to call external services
 	router.GET("/call-services", callExternalServicesHandler)
