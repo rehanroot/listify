@@ -12,6 +12,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq" // Import PostgreSQL driver
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -21,6 +22,7 @@ import (
 var (
 	mariaDB     *sql.DB
 	mySQLDB     *sql.DB
+	postgresDB  *sql.DB // PostgreSQL DB variable
 	mongoClient *mongo.Client
 )
 
@@ -50,6 +52,20 @@ func connectMySQL() {
 	}
 	mySQLDB = db
 	fmt.Println("Connected to MySQL")
+}
+
+// Connect to PostgreSQL
+func connectPostgreSQL() {
+	dsn := "user=postgres password=Prithibi420@ dbname=listify host=localhost sslmode=disable"
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		log.Fatal("PostgreSQL connection failed:", err)
+	}
+	if err := db.Ping(); err != nil {
+		log.Fatal("PostgreSQL ping failed:", err)
+	}
+	postgresDB = db
+	fmt.Println("Connected to PostgreSQL")
 }
 
 // Connect to MongoDB
@@ -156,6 +172,7 @@ func main() {
 	// Connect to databases
 	connectMariaDB()
 	connectMySQL()
+	connectPostgreSQL() // Connect to PostgreSQL
 	connectMongoDB()
 
 	// Set up Gin router with CORS middleware
@@ -187,12 +204,29 @@ func main() {
 		})
 	})
 
+	// PostgreSQL test route
+	router.GET("/postgresql", func(c *gin.Context) {
+		var result int
+		err := postgresDB.QueryRow("SELECT 1 + 1").Scan(&result)
+		if err != nil {
+			log.Println("PostgreSQL query error:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "PostgreSQL query failed",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"solution": result, // Should return { solution: 2 }
+		})
+	})
+
 	// MongoDB test route
 	router.GET("/mongodb", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Connected to MongoDB successfully!",
 		})
 	})
+
 	// Hello World route
 	router.GET("/hello", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

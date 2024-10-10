@@ -3,8 +3,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const mysql = require('mysql'); // Import MySQL
+const mysql2 = require('mysql2'); // Import MySQL2
+const { Client } = require('pg'); // Import pg for PostgreSQL
 const axios = require('axios'); // Import axios for HTTP requests
-const mysql2 = require('mysql2');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,6 +29,7 @@ const mysqlConnection = mysql.createConnection({
     password: 'Prithibi420@',  // Replace with your MySQL password
     database: 'listify'  // Replace with your database name
 });
+
 // MariaDB connection
 const mariaDBConnection = mysql2.createConnection({
     host: '127.0.0.1',
@@ -46,6 +48,24 @@ mariaDBConnection.connect(err => {
     console.log('MariaDB connected');
 });
 
+// PostgreSQL connection
+const pgClient = new Client({
+    user: 'postgres', // PostgreSQL username
+    host: 'localhost',
+    database: 'listify', // Replace with your database name
+    password: 'Prithibi420@', // PostgreSQL password
+    port: 5432, // Default PostgreSQL port
+});
+
+// Connect to PostgreSQL
+pgClient.connect(err => {
+    if (err) {
+        console.error('PostgreSQL connection error:', err);
+        return;
+    }
+    console.log('PostgreSQL connected');
+});
+
 // MariaDB test API
 app.get('/api/mariadb/test', (req, res) => {
     mariaDBConnection.query('SELECT 1 + 1 AS solution', (err, results) => {
@@ -54,6 +74,17 @@ app.get('/api/mariadb/test', (req, res) => {
             return res.status(500).json({ error: 'MariaDB query failed' });
         }
         res.json({ solution: results[0].solution }); // Should return { solution: 2 }
+    });
+});
+
+// Test PostgreSQL connection and query
+app.get('/api/postgresql/test', (req, res) => {
+    pgClient.query('SELECT 1 + 1 AS solution', (err, results) => {
+        if (err) {
+            console.error('PostgreSQL query error:', err);
+            return res.status(500).json({ error: 'PostgreSQL query failed' });
+        }
+        res.json({ solution: results.rows[0].solution }); // Should return { solution: 2 }
     });
 });
 
@@ -176,10 +207,10 @@ app.get('/api/health/python', async (req, res) => {
         });
     }
 });
+
 app.get('/api/node', (req, res) => {
     res.json({ message: "Hello from Node.js Service!" });
 });
-
 
 // Start the server
 app.listen(PORT, () => {

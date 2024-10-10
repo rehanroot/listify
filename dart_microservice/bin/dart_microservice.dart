@@ -1,6 +1,7 @@
 import 'package:mysql1/mysql1.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:http/http.dart' as http;
+import 'package:postgres/postgres.dart'; // Import the PostgreSQL package
 
 /// MySQL connection setup
 Future<MySqlConnection> connectToMySQL() async {
@@ -33,6 +34,19 @@ Future<Db> connectToMongoDB() async {
   return db;
 }
 
+/// PostgreSQL connection setup
+Future<PostgreSQLConnection> connectToPostgreSQL() async {
+  final connection = PostgreSQLConnection(
+    'localhost', // Host
+    5432,        // Port
+    'listify', // Database name
+    username: 'postgres', // Your PostgreSQL username
+    password: 'Prithibi420@', // Your PostgreSQL password
+  );
+  await connection.open();
+  return connection;
+}
+
 /// Function to call an API
 Future<void> callApi(String url) async {
   try {
@@ -52,6 +66,7 @@ void main() async {
   MySqlConnection? mysqlConn;
   MySqlConnection? mariaDbConn;
   Db? mongoDb;
+  PostgreSQLConnection? postgresConn; // Declare PostgreSQL connection
 
   try {
     // MySQL connection
@@ -65,6 +80,10 @@ void main() async {
     // MongoDB connection
     mongoDb = await connectToMongoDB();
     print('Connected to MongoDB');
+
+    // PostgreSQL connection
+    postgresConn = await connectToPostgreSQL();
+    print('Connected to PostgreSQL');
 
     // API connections
     print('Calling Java API...');
@@ -94,6 +113,10 @@ void main() async {
     if (mongoDb != null) {
       await mongoDb.close();
       print('MongoDB connection closed.');
+    }
+    if (postgresConn != null) {
+      await postgresConn.close();
+      print('PostgreSQL connection closed.');
     }
     print('All connections closed successfully.');
   }
