@@ -3,11 +3,11 @@ import requests
 import mysql.connector
 import mariadb
 from pymongo import MongoClient
+import psycopg2  # Import the PostgreSQL library
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3001"}})
-
 
 # MySQL connection setup
 def mysql_connection():
@@ -21,7 +21,6 @@ def mysql_connection():
         return connection
     except mysql.connector.Error as e:
         return str(e)
-
 
 # MariaDB connection setup
 def mariadb_connection():
@@ -37,7 +36,6 @@ def mariadb_connection():
     except mariadb.Error as e:
         return str(e)
 
-
 # MongoDB connection setup
 def mongodb_connection():
     try:
@@ -47,18 +45,28 @@ def mongodb_connection():
     except Exception as e:
         return str(e)
 
+# PostgreSQL connection setup
+def postgresql_connection():
+    try:
+        connection = psycopg2.connect(
+            host="localhost",  # Replace with your PostgreSQL hostname
+            database="listify",  # Replace with your PostgreSQL database name
+            user="postgres",  # Replace with your PostgreSQL username
+            password="Prithibi420@"  # Replace with your PostgreSQL password
+        )
+        return connection
+    except Exception as e:
+        return str(e)
 
 # Test route
 @app.route('/api/test', methods=['GET'])
 def test():
     return jsonify({'message': 'Flask is up and running!'})
 
-
 # Health check endpoint for the Flask app
 @app.route('/api/health', methods=['GET'])
 def health():
     return jsonify({'status': 'success', 'message': 'Python backend is running!'})
-
 
 # Test connectivity to Java
 @app.route('/api/java', methods=['GET'])
@@ -69,7 +77,6 @@ def connect_java():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
 # Test connectivity to Node.js (Health check)
 @app.route('/api/health/nodejs', methods=['GET'])
 def health_node():
@@ -78,7 +85,6 @@ def health_node():
         return jsonify({'message': 'Connected to Node.js!', 'nodeResponse': response.json()}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 # New endpoint: Test MySQL connection
 @app.route('/api/mysql/test', methods=['GET'])
@@ -96,7 +102,6 @@ def test_mysql():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
 # New endpoint: Test MariaDB connection
 @app.route('/api/mariadb/test', methods=['GET'])
 def test_mariadb():
@@ -113,7 +118,6 @@ def test_mariadb():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
 # New endpoint: Test MongoDB connection
 @app.route('/api/mongodb/test', methods=['GET'])
 def test_mongodb():
@@ -127,6 +131,21 @@ def test_mongodb():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# New endpoint: Test PostgreSQL connection
+@app.route('/api/postgresql/test', methods=['GET'])
+def test_postgresql():
+    conn = postgresql_connection()
+    if isinstance(conn, str):
+        return jsonify({'error': f"PostgreSQL connection failed: {conn}"}), 500
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1 + 1;")
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'PostgreSQL connected', 'result': result[0]})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
