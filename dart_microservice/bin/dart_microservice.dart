@@ -1,7 +1,13 @@
+import 'dart:io';
 import 'package:mysql1/mysql1.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:http/http.dart' as http;
-import 'package:postgres/postgres.dart'; // Import the PostgreSQL package
+import 'package:postgres/postgres.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart' as io;
+import 'package:shelf_router/shelf_router.dart';
+import 'dart:async';
+import 'dart:convert';
 
 /// MySQL connection setup
 Future<MySqlConnection> connectToMySQL() async {
@@ -39,7 +45,7 @@ Future<PostgreSQLConnection> connectToPostgreSQL() async {
   final connection = PostgreSQLConnection(
     'localhost', // Host
     5432,        // Port
-    'listify', // Database name
+    'listify',   // Database name
     username: 'postgres', // Your PostgreSQL username
     password: 'Prithibi420@', // Your PostgreSQL password
   );
@@ -52,7 +58,6 @@ Future<void> callApi(String url) async {
   try {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      // Handle the response from the API
       print('Response from $url: ${response.body}');
     } else {
       print('Failed to call API: ${response.statusCode} - ${response.body}');
@@ -62,13 +67,37 @@ Future<void> callApi(String url) async {
   }
 }
 
+
+// Dart API setup
+Future<HttpServer> startDartApi() async {
+  final router = Router();
+
+  // Define a GET endpoint at /api/dart
+  router.get('/api/dart', (Request request) {
+    final jsonResponse = {'message': 'Hello from Dart API!'};
+    // Return a JSON response with the correct content type
+    return Response.ok(jsonEncode(jsonResponse), headers: {'Content-Type': 'application/json'});
+  });
+
+  final handler = Pipeline().addMiddleware(logRequests()).addHandler(router);
+
+  // Start the server
+  final server = await io.serve(handler, 'localhost', 9191);
+  print('Dart API listening on port ${server.port}');
+  return server;
+}
+
+
 void main() async {
   MySqlConnection? mysqlConn;
   MySqlConnection? mariaDbConn;
   Db? mongoDb;
-  PostgreSQLConnection? postgresConn; // Declare PostgreSQL connection
+  PostgreSQLConnection? postgresConn;
 
   try {
+    // Start Dart API and wait until it’s ready
+    await startDartApi();
+
     // MySQL connection
     mysqlConn = await connectToMySQL();
     print('Connected to MySQL');
@@ -97,6 +126,9 @@ void main() async {
 
     print('Calling Go API...');
     await callApi('http://localhost:7000/hello');
+
+    print('Calling Dart API...');
+    await callApi('http://localhost:9191/api/dart');
 
   } catch (e) {
     print('Error: $e');
