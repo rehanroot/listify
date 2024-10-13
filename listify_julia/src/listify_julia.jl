@@ -13,13 +13,14 @@ const APIs = Dict(
 # ---- API Query Function ----
 function query_api(api_url::String)
     try
-        response = HTTP.get(api_url)
+        response = HTTP.get(api_url; timeout=5)  # Set a timeout of 5 seconds
         if response.status == 200
             return JSON.parse(String(response.body))
         else
             return Dict("error" => "Failed to retrieve data from " * api_url)
         end
     catch e
+        println("Error querying API: $api_url - $e")  # Log error
         return Dict("error" => "Exception occurred: " * string(e))
     end
 end
@@ -27,6 +28,11 @@ end
 # ---- Microservice ----
 function handle_request(req::HTTP.Request)
     if req.method == "GET"
+        # Check for favicon request
+        if req.target == "/favicon.ico"
+            return HTTP.Response(204)  # No Content
+        end
+        
         response_data = Dict()
         
         # Query all APIs
