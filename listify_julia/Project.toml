@@ -1,0 +1,4 @@
+name = "listify_julia"
+uuid = "e5a978f7-e7b2-4708-a1c6-7db8a800206e"
+authors = ["rehanroot <rehanroot2@gmail.com>"]
+version = "0.1.0"
