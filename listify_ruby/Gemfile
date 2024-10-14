@@ -1,0 +1,13 @@
+# Gemfile
+source 'https://rubygems.org'
+
+gem 'sinatra'
+gem 'sinatra-activerecord'
+gem 'sqlite3' # or your chosen database adapter
+gem 'pg'
+gem 'mongo'
+gem 'dotenv'
+gem 'activerecord-jdbc-adapter'
+gem 'httparty'
+gem 'rake'
+gem 'ostruct'

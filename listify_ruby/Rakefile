@@ -1,0 +1,7 @@
+require 'sinatra/activerecord/rake'
+require_relative 'lib/app' # Ensure this points to your main app file
+
+# Load the database configuration
+task :environment do
+  require_relative 'lib/app'
+end
